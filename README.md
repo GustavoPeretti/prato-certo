@@ -11,9 +11,9 @@ O **Prato Certo IFC** é uma aplicação web desenvolvida para facilitar o plane
 
 ## Tecnologias Utilizadas
 
-- **HTML**: Estrutura da aplicação.
-- **CSS**: Estilização para uma interface moderna e responsiva.
-- **JavaScript**: Funcionalidades interativas e dinâmicas.
+- **HTML**
+- **CSS**
+- **JavaScript**
 - **MySQL**
 - **Flask**
 
