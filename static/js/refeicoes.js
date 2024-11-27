@@ -6,6 +6,7 @@ const container = document.querySelector(".controll_days");
 days.forEach(day => {
     const card = document.createElement("div");
     card.classList.add("fundo");
+    card.classList.add(`bloco-${day.toLowerCase()}`);
 
     const title = document.createElement("h2");
     title.classList.add("title_day");
@@ -22,6 +23,7 @@ days.forEach(day => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.classList.add("btn-ch");
+        checkbox.classList.add(`botao-${item.toLowerCase().replaceAll('ç', 'c').replaceAll('é', 'e')}`);
 
         const label = document.createElement("label");
         label.textContent = item;
@@ -65,4 +67,47 @@ document.getElementById("ver-cardapio-btn").addEventListener("click", function (
     
 });
 
+function diasDaSemana() {
+    let dicionarioDias = {};
 
+    let data = new Date();
+    
+    const diaDaSemana = data.getDay();
+    data.setDate(data.getDate() - diaDaSemana);
+    
+    for (let i = 0; i < 7; i++) {
+        let diaFormatado = `${String(data.getDate()).padStart(2, '0')}-${String(data.getMonth() + 1).padStart(2, '0')}-${data.getFullYear()}`;
+        dicionarioDias[days[i].toLowerCase()] = diaFormatado;
+        
+        data.setDate(data.getDate() + 1);
+    }
+
+    return dicionarioDias;
+}
+
+document.querySelector('#submit').addEventListener('click', async () => {
+    let interesses = {};
+
+    for (let dia of days) {
+        let interessesDia = [];
+
+        let bloco = document.querySelector(`.bloco-${dia.toLowerCase()}`);
+
+        let checkboxes = bloco.querySelectorAll('input[type=checkbox]');
+
+        for (let checkbox of checkboxes) {
+            if (checkbox.checked) {
+                interessesDia.push(Array.from(checkbox.classList).filter(e => e.substring(0, 6) == 'botao-')[0].substring(6));
+            }
+        }
+
+        interesses[diasDaSemana()[dia.toLowerCase()]] = interessesDia;
+    }
+
+    for (let interesse of Object.keys(interesses)) {
+        console.log(interesse) // 24-11-2024
+        console.log(interesses[interesse]) // ['almoco']
+        
+        
+    }
+});
