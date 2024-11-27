@@ -11,12 +11,12 @@ def buscar_numero_refeicoes(data, tipo):
     if not session['usuario']['administrador']:
         return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
     
-    resultado = db.query('SELECT COUNT(*) FROM interesses WHERE dia = %s AND tipo = %s;', data, tipo)
+    resultado = db.query('SELECT COUNT(*) as interesses FROM interesses WHERE dia = %s AND tipo = %s;', data, tipo)
 
     if not resultado:
         return jsonify({'ok': False, 'mensagem': 'Nenhum recurso foi encontrado.'}), 404
 
-    return jsonify({'ok': True, 'resultado': resultado}), 200
+    return jsonify({'ok': True, 'resultado': resultado[0]['interesses']}), 200
 
 @interesse.route('/', methods=['POST'])
 def cadastrar_interesse():
