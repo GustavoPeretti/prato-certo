@@ -15,6 +15,7 @@ O **Prato Certo IFC** é uma aplicação web desenvolvida para facilitar o plane
 - **CSS**: Estilização para uma interface moderna e responsiva.
 - **JavaScript**: Funcionalidades interativas e dinâmicas.
 - **MySQL**
+- **Flask**
 
 ## Instalação e Uso
 
