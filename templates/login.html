@@ -12,14 +12,16 @@
         <img class='logo' src="/static/img/logo if.png" alt="">
         <h1>Entre na sua conta</h1>
         <div class="container">
-            <input type="text" placeholder="Usuário" required>
-            <input type="password" placeholder="Senha" required>
-            <button class="btn-green" type="submit">Entrar</button>
+            <input type="text" name="matricula" placeholder="Matrícula" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button id="botao-login" class="btn-green" type="submit">Entrar</button>
             <button onclick="window.location.href='/'" class="btn-gray" type="button">Voltar</button>
             <div class="line"></div>
         </div>
 
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/js/login.js"></script>
 </body>
 </html>
