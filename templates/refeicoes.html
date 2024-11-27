@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prato Certo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=close" />
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body id="body">
 
     <header>
         <img class='logo_header' src="/static/img/logo if.png" alt="">
-        <a href="/home"><h2 class="back">Sair</h2></a>
+        <a href="/"><h2 class="back">Sair</h2></a>
     </header>
 
     <main>
         <h1 class="titulo">Minhas Refeições</h1>
-        <button class="btn-cardap">Ver cardápio</button>
+        <button id="ver-cardapio-btn" class="btn-cardap">Ver cardápio</button>
 
         <div class="controll_days"></div>
 
@@ -23,6 +24,25 @@
 
 
     </main>
+
+    <div id="modal-cardapio-container">
+        <div id="modal-cardapio">
+            <div id="header-modal">
+                <h1>Cardápio</h1>
+                <span id="close-modal" class="material-symbols-outlined">close</span>
+            </div>
+            <select name="" class="tipos-select">
+                <option value="cafe">Café da Manhã</option>
+                <option value="almoco">Almoço</option>
+                <option value="lanche">Lanche</option>
+                <option value="janta">Janta</option>
+            </select>
+            <table id="cardapio-home">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script src="/static/js/refeicoes.js"></script>
     
