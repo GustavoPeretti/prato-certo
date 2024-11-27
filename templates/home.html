@@ -8,8 +8,53 @@
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
-    <div class="tela">
-        <img class='logo' src="/static/img/logo if.png" alt="">
+    <div class="tela-home">
+        <img class='logo-home' src="/static/img/logo if.png" alt="">
+        <h1 id="title-home">SISTEMA DE GESTÃO DO REFEITÓRIO</h1>
+        <p>Faça seu</p>
+        <button onclick="window.location.href='/login'" id="login-btn" class="btn-green">Login</button>
+        <p>Ou veja o cardápio semanal</p>
+        <div id="cardapio-container">
+            <h2>Cardápio:</h2>
+            <select name="" class="tipos-select">
+                <option value="cafe">Café da Manhã</option>
+                <option value="almoco">Almoço</option>
+                <option value="lanche">Lanche</option>
+                <option value="janta">Janta</option>
+            </select>
+            <table id="cardapio-home">
+                <tbody>
+                    <tr>
+                      <th>Domingo</td>
+                      <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                    <tr>
+                      <th>Segunda-Feira</td>
+                      <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                    <tr>
+                      <th>Terça-Feira</td>
+                      <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                    <tr>
+                      <th>Quarta-Feira</td>
+                      <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                    <tr>
+                      <th>Quinta-Feira</td>
+                      <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                    <tr>
+                        <th>Sexta-Feira</td>
+                        <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                    <tr>
+                        <th>Sábado</td>
+                        <td>Pão, Joelho de Porco e Tudo mais</td>
+                    </tr>
+                  </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

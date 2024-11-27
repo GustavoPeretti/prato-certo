@@ -50,6 +50,12 @@ def buscar_cardapios(data, tipo):
 
 @cardapio.route('/', methods=['POST'])
 def cadastrar_cardapio():
+    if 'usuario' not in session:
+        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
+    
+    if not session['usuario']['administrador']:
+        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
+
     dados = request.json
 
     parametros = {
@@ -81,6 +87,12 @@ def cadastrar_cardapio():
 
 @cardapio.route('/', methods=['DELETE'])
 def deletar_cardapio():
+    if 'usuario' not in session:
+        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
+    
+    if not session['usuario']['administrador']:
+        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
+    
     dados = request.json
 
     parametros = {
@@ -89,6 +101,24 @@ def deletar_cardapio():
         'item': lambda x: isinstance(x, str)
     }
 
+    for parametro in parametros:
+        if parametro not in dados:
+            return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
+        argumento = dados[parametro]
+        if not parametros[parametro](argumento):
+            return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
     
+    try:
+        item = db.query('SELECT * FROM itens_cardapios_dias WHERE dia = %s AND tipo = %s AND item = %s;', dados['dia'], dados['tipo'], dados['item'])
+    except:
+        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar validar o item.'}), 400
+    
+    if not item:
+        return jsonify({'ok': False, 'mensagem': 'Item não existente.'}), 404
+    
+    try:
+        db.query('DELETE FROM itens_cardapios_dias WHERE dia = %s AND tipo = %s AND item = %s;', dados['dia'], dados['tipo'], dados['item'])
+    except:
+        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar deletar o item.'}), 400
 
-
+    return jsonify({'ok': True, 'mensagem': 'Item deletado.'}), 200

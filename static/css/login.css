@@ -45,10 +45,12 @@ button {
 .btn-green {
     background-color: var(--verde);
     color: var(--branco);
+    cursor: pointer;
 }
 .btn-gray {
     background-color: var(--cinza);
     color: var(--branco);
+    cursor: pointer;
 }
 
 .line {

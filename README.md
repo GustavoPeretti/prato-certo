@@ -4,7 +4,6 @@ O **Prato Certo IFC** é uma aplicação web desenvolvida para facilitar o plane
 
 ## Funcionalidades
 
-- **Definição de Preferências Alimentares**: Configure suas preferências e restrições alimentares.
 - **Seleção de Dias da Semana**: Escolha em quais dias pretende realizar suas refeições no refeitório.
 - **Interface Simples e Responsiva**: Navegue facilmente em qualquer dispositivo, com design adaptado para desktop, tablets e smartphones.
 - **Resumo Personalizado**: Visualize e edite suas escolhas de forma prática.
