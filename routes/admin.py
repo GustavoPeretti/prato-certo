@@ -11,3 +11,14 @@ def admin_handler():
         return redirect(url_for('login.login_handler'))
     
     return render_template('admin.html')
+
+@admin.route('/cardapio')
+def cardapio():
+    if 'usuario' not in session:
+        return redirect(url_for('login.login_handler'))
+    
+    if not session['usuario']['administrador']:
+        return redirect(url_for('login.login_handler'))
+    
+    return render_template('cardapio.html')
+
