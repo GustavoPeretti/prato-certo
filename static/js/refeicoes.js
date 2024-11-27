@@ -55,6 +55,18 @@ days.forEach(day => {
     container.appendChild(card);
 });
 
+document.getElementById("close-modal").addEventListener("click", function () {
+    const modalElement = document.querySelector("#modal-cardapio-container");
+    modalElement.style.display = "none";
+    
+});
+
+document.getElementById("ver-cardapio-btn").addEventListener("click", function () {
+    const modalElement = document.querySelector("#modal-cardapio-container");
+    modalElement.style.display = "flex";
+    
+});
+
 function diasDaSemana() {
     let dicionarioDias = {};
 
