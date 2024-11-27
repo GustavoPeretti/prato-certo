@@ -118,3 +118,44 @@ document.querySelector('#ver-cardapio-btn').addEventListener('click', () => {
 document.querySelector('.tipos-select-modal').addEventListener('change', () => {
     atualizarTabela();
 });
+
+function adicionarItem(tipo, nome) {
+    let item = document.createElement('div');
+    item.classList.add('item-refeicao-acordeao');
+
+    let span = document.createElement('span');
+    span.textContent = nome;
+
+    let icone = document.createElement('span');
+    icone.classList.add('material-symbols-outlined')
+    icone.textContent = 'delete';
+    icone.addEventListener('click', () => {
+        item.remove();
+    })
+
+    item.appendChild(span);
+    item.appendChild(icone);
+
+    let acordeao = document.querySelector(`.acordeao-${tipo}`);
+
+    acordeao.querySelector('.accordion-body').insertBefore(item, acordeao.querySelector('.botao-cadastrar'));
+}
+
+document.querySelectorAll('.accordion-body input').forEach(e => {
+    e.addEventListener("keyup", ({key}) => {
+        if (key === "Enter") {
+            let tipo = Array.from(e.parentElement.parentElement.parentElement.parentElement.classList).filter(e => e.substring(0, 9) == 'acordeao-')[0].substring(9);
+            adicionarItem(tipo, e.value);
+            e.value = '';
+        }
+    });
+});
+
+document.querySelectorAll('.accordion-body button').forEach(e => {
+    e.addEventListener("click", () => {
+        let tipo = Array.from(e.parentElement.parentElement.parentElement.parentElement.classList).filter(e => e.substring(0, 9) == 'acordeao-')[0].substring(9);
+        adicionarItem(tipo, e.previousElementSibling.value);
+        e.value = '';
+    });
+});
+

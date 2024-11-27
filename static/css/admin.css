@@ -53,6 +53,36 @@
     font-size: 28px;
 }
 
+.accordion-collapse .item-refeicao-acordeao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25em;
+}
+
+.accordion-collapse .item-refeicao-acordeao span:last-child {
+    color: var(--vermelho);
+    user-select: none;
+    cursor: pointer;
+}
+
+.accordion-collapse .botao-cadastrar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+}
+
+.accordion-collapse .botao-cadastrar button {
+    background-color: var(--verde-claro);
+    color: white;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media (min-width: 720px) {
     #buttons-admin {
         width: 250px;
