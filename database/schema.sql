@@ -11,26 +11,15 @@ CREATE TABLE usuarios (
     administrador BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE TABLE itens_cardapio (
-	nome VARCHAR(255) PRIMARY KEY
-);
-
 CREATE TABLE itens_cardapios_dias (
 	dia DATE NOT NULL,
     tipo ENUM('cafe', 'almoco', 'lanche', 'janta') NOT NULL,
-    item VARCHAR(255) NOT NULL,
-    FOREIGN KEY (item) REFERENCES itens_cardapio (nome)
+    item VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE reservas (
+CREATE TABLE interesses (
 	dia DATE NOT NULL,
     tipo ENUM('cafe', 'almoco', 'lanche', 'janta') NOT NULL,
     usuario VARCHAR(12) NOT NULL,
-    FOREIGN KEY (usuario) REFERENCES usuarios (matricula)
-);
-
-CREATE TABLE costumes (
-	usuario VARCHAR(12) NOT NULL,
-    tipo ENUM('cafe', 'almoco', 'lanche', 'janta') NOT NULL,
     FOREIGN KEY (usuario) REFERENCES usuarios (matricula)
 );

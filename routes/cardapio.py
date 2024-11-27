@@ -111,7 +111,7 @@ def deletar_cardapio():
     try:
         item = db.query('SELECT * FROM itens_cardapios_dias WHERE dia = %s AND tipo = %s AND item = %s;', dados['dia'], dados['tipo'], dados['item'])
     except:
-        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar valida o item.'}), 400
+        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar validar o item.'}), 400
     
     if not item:
         return jsonify({'ok': False, 'mensagem': 'Item não existente.'}), 404
