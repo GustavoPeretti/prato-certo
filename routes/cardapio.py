@@ -34,9 +34,16 @@ def buscar_cardapios(data, tipo):
         *dias
     )
 
-    print(resultado)
-
     if not resultado:
         return jsonify({'ok': False, 'mensagem': 'Nenhum recurso foi encontrado.'}), 404
     
-    return jsonify({'ok': True, 'resultado': resultado}), 200
+    cardapio_semana = {}
+    
+    for dia in dias:
+        itens_dia = []
+        for item in resultado:
+            if item['dia'].strftime('%Y-%m-%d') == dia:
+                itens_dia.append(item['item'])
+        cardapio_semana[dia] = itens_dia
+    
+    return jsonify({'ok': True, 'resultado': cardapio_semana}), 200
