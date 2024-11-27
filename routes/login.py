@@ -1,7 +1,28 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, request, jsonify, session, render_template
+from ..database.db import db
 
 login = Blueprint('login', __name__)
 
-@login.route('/')
+@login.route('/', methods=['GET', 'POST'])
 def login_handler():
+    if request.method == 'POST':
+        dados = request.json
+
+        if ('matricula' not in dados) or ('senha' not in dados):
+            return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não especificado.'}), 400 
+
+        resultado = db.query('SELECT * FROM usuarios WHERE matricula = %s;', dados['matricula'])
+
+        if not resultado:
+            return jsonify({'ok': False, 'mensagem': 'Matrícula não cadastrada.'}), 400
+        
+        resultado = db.query('SELECT * FROM usuarios WHERE matricula = %s AND senha = SHA2(%s, 256);', dados['matricula'], dados['senha'])
+
+        if not resultado:
+            return jsonify({'ok': False, 'mensagem': 'Senha incorreta.'}), 401
+        
+        session['matricula'] = resultado[0]['matricula']
+        
+        return jsonify({'ok': True, 'mensagem': 'Usuário autenticado.'}), 200
+
     return render_template('login.html')
