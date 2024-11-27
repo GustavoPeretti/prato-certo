@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+#body {
+    max-height: 100vh;
+}
+
+header {
+    width: 100%;
+    height: 7em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 3em;
+}
+
+.logo_header {
+    height: 70%;
+}
+
+.back {
+    font-weight: normal;
+    text-decoration: underline;
+    cursor: pointer;
+}
+a {
+    color: black;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.btn-cardap {
+    background-color: var(--verde);
+    color: var(--branco);
+}
+
+main h1 {
+    padding-bottom: 1.5em;
+}
+
+.fundo {
+    background-color: #a2a2a290;
+    width: 70%;
+    height: 15em;
+    margin-block: 0.5em;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+.title_day {
+    padding-top: 1em;
+}
+
+.checkbox {
+    padding-top: 1em;
+    display: flex;
+    gap: 15px;
+}
+
+.check_label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-ch {
+    width: 3em;
+    height: 3em;
+    background-color: var(--branco);
+    border: 1px solid black;
+}
+
+input[type="checkbox"]:checked {
+    accent-color: green;
+}
+
+#todos {
+    text-decoration: underline;
+    font-size: 17px;
+    padding-bottom: 1em;
+    cursor: pointer;
+}
+
+
+.controll_days {
+    overflow-y: scroll;
+    height: 52vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+#submit {
+    margin-top: 1em;
+}
+
+
+
+
+@media (max-width: 400px) {
+    .btn-ch  {
+        height: 2em;
+        width: 2em;
+    }
+
+}
+
+@media (max-width: 700px) {
+    .fundo {
+        width: 90%;
+    }
+
+    .btn-cardap {
+        width: 90%;
+    }
+
+}
+
+@media (min-width: 700px) {
+    .controll_days {
+        height: 43vh;
+    }
+
+}
