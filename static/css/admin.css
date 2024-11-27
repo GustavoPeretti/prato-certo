@@ -1,0 +1,104 @@
+#main-admin h1 {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#main-admin {
+    display: none;
+}
+
+#display-qtd-refeicao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 250px;
+}
+
+#qtd-refeicao {
+    font-size: 60px;
+}
+
+#line {
+    height: 3px;
+    width: 100%;
+    background-color: var(--verde);
+}
+
+#tipo-select {
+    border-radius: 5px;
+    text-align: center;
+}
+
+#buttons-admin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 90%;
+    margin-top: 50px;
+}
+
+#buttons-admin button {
+    width: 100% !important;
+}
+
+.btn-green-light {
+    background-color: var(--verde-claro);
+    color: var(--branco);
+    cursor: pointer;
+}
+
+#tipo-refeicao {
+    font-size: 28px;
+}
+
+@media (min-width: 720px) {
+    #buttons-admin {
+        width: 250px;
+    }
+}
+
+#container-add-cardapio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+#buttons-cardapio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    gap: 5%;
+}
+
+#buttons-cardapio .btn-green {
+    width: 80%;
+}
+
+#buttons-cardapio .btn-close {
+    background-color: var(--vermelho);
+    color: white;
+    width: 15%;
+}
+
+#formulario-cardapio input, div {
+    width: 100%;
+}
+
+#formulario-cardapio {
+    width: 90%;
+}
+
+@media (min-width: 720px) {
+    #buttons-cardapio {
+        width: 400px;
+    }
+
+    #formulario-cardapio {
+        width: 400px;
+    }
+}

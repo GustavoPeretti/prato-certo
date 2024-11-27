@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prato Certo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=close" />
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <header>
+        <img class='logo_header' src="/static/img/logo if.png" alt="">
+        <a href="/"><h2 class="back">Sair</h2></a>
+    </header>
+    <main id="main-admin">
+        <h1>Estimativa de refeições</h1>
+        <div id="display-qtd-refeicao">
+            <span id="qtd-refeicao">120 <span id="tipo-refeicao">jantas</span></span>
+            <div id="line"></div>
+            <select name="" id="tipo-select" class="tipos-select">
+                <option value="cafe">Café da Manhâ</option>
+                <option value="almoco">Almoço</option>
+                <option value="lanche">Lanche</option>
+                <option value="janta">Janta</option>
+            </select>
+        </div>
+        <div id="buttons-admin">
+            <button id="add-cardapio-btn" class="btn-green">Adicionar Cardápio</button>
+            <button id="ver-cardapio-btn" class="btn-green-light">Ver Cardápio</button>
+        </div>
+    </main>
+    <div id="container-add-cardapio">
+        <h1>Adicionar Cardápio</h1>
+        <div id="formulario-cardapio">
+            <input type="date">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div id="buttons-cardapio">
+            <button id="save-cardapio-btn" class="btn-green">Salvar</button>
+            <button class="btn-close"><span class="material-symbols-outlined">close</span></button>
+        </div>
+    </div>
+</body>
+</html>

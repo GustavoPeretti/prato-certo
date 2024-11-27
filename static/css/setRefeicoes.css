@@ -42,7 +42,7 @@ main {
     color: var(--branco);
 }
 
-main h1 {
+main .titulo {
     padding-bottom: 1.5em;
 }
 
