@@ -37,3 +37,11 @@ Para instalar e utilizar o **Prato Certo IFC**, siga os passos abaixo:
 1. Clone o repositório:
    ```bash
    git clone https://github.com/seu-usuario/prato-certo-ifc.git
+
+2. Navegue até o diretório do projeto:
+   ```bash
+    cd prato-certo-ifc
+
+3. Instale as dependências necessárias:
+   ```bash
+    pip install -r requirements.txt
