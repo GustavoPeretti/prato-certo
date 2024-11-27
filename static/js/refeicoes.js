@@ -95,6 +95,24 @@ function diasDaSemana() {
     return dicionarioDias;
 }
 
+function diasDaSemanaInvertido() {
+    let dicionarioDias = {};
+
+    let data = new Date();
+    
+    const diaDaSemana = data.getDay();
+    data.setDate(data.getDate() - diaDaSemana);
+    
+    for (let i = 0; i < 7; i++) {
+        let diaFormatado = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
+        dicionarioDias[diaFormatado] = days[i].toLowerCase();
+        
+        data.setDate(data.getDate() + 1);
+    }
+
+    return dicionarioDias;
+}
+
 document.querySelector('#submit').addEventListener('click', async () => {
     let interesses = [];
 
@@ -156,6 +174,7 @@ async function atualizarTabela() {
             title: "Erro",
             text: respostaJSON.mensagem
         });
+
         return;
     }
 
@@ -191,4 +210,32 @@ document.querySelector('#ver-cardapio-btn').addEventListener('click', () => {
 
 document.querySelector('.tipos-select-modal').addEventListener('change', () => {
     atualizarTabela();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    let resposta = await fetch(`/api/interesse`);
+
+    let respostaJSON = await resposta.json();
+
+    if (!respostaJSON.ok) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: respostaJSON.mensagem
+        });
+        
+        return;
+    }
+
+    let interesses = respostaJSON.resultado;
+
+    for (let dia of Object.keys(interesses)) {
+        let itens_interesse = interesses[dia]
+        
+        let bloco = document.querySelector(`.bloco-${diasDaSemanaInvertido()[dia]}`);
+
+        for (let interesse of itens_interesse) {
+            bloco.querySelector(`.botao-${interesse}`).checked = true;
+        }
+    }
 });
