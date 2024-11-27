@@ -21,7 +21,7 @@ def login_handler():
         if not resultado:
             return jsonify({'ok': False, 'mensagem': 'Senha incorreta.'}), 401
         
-        session['matricula'] = resultado[0]['matricula']
+        session['usuario'] = {'matricula': resultado[0]['matricula'], 'nome': resultado[0]['nome']}
         
         return jsonify({'ok': True, 'mensagem': 'Usuário autenticado.'}), 200
 

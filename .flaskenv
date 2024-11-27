@@ -1,0 +1,2 @@
+FLASK_APP=prato_certo.py
+FLASK_ENV=development
