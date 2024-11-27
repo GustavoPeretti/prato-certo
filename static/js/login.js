@@ -35,6 +35,5 @@ document.querySelector('#botao-login').addEventListener('click', async () => {
         return;
     }
 
-    
-    window.location.href = '/';
+    window.location.href = respostaJSON.administrador ? '/admin' : '/refeicoes';
 });

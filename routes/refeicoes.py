@@ -6,4 +6,4 @@ refeicoes = Blueprint('refeicoes', __name__)
 
 @refeicoes.route('/')
 def refeicoes_handler():
-    return render_template('setRefeicoes.html')
+    return render_template('refeicoes.html')
