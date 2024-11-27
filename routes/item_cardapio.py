@@ -16,6 +16,9 @@ def buscar_itens():
 def cadastrar_item():
     if 'usuario' not in session:
         return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
+    
+    if not session['usuario']['administrador']:
+        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
 
     dados = request.json
 
@@ -37,6 +40,9 @@ def cadastrar_item():
 @item_cardapio.route('/<nome>', methods=['DELETE'])
 def deletar_item(nome):
     if 'usuario' not in session:
+        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
+    
+    if not session['usuario']['administrador']:
         return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
     
     try:
