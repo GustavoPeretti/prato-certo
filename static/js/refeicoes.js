@@ -64,7 +64,7 @@ function diasDaSemana() {
     data.setDate(data.getDate() - diaDaSemana);
     
     for (let i = 0; i < 7; i++) {
-        let diaFormatado = `${String(data.getDate()).padStart(2, '0')}-${String(data.getMonth() + 1).padStart(2, '0')}-${data.getFullYear()}`;
+        let diaFormatado = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
         dicionarioDias[days[i].toLowerCase()] = diaFormatado;
         
         data.setDate(data.getDate() + 1);
@@ -77,25 +77,53 @@ document.querySelector('#submit').addEventListener('click', async () => {
     let interesses = {};
 
     for (let dia of days) {
-        let interessesDia = [];
+        let interessesDia = {};
 
         let bloco = document.querySelector(`.bloco-${dia.toLowerCase()}`);
 
         let checkboxes = bloco.querySelectorAll('input[type=checkbox]');
 
         for (let checkbox of checkboxes) {
-            if (checkbox.checked) {
-                interessesDia.push(Array.from(checkbox.classList).filter(e => e.substring(0, 6) == 'botao-')[0].substring(6));
-            }
+            interessesDia[Array.from(checkbox.classList).filter(e => e.substring(0, 6) == 'botao-')[0].substring(6)] = checkbox.checked;
         }
 
         interesses[diasDaSemana()[dia.toLowerCase()]] = interessesDia;
     }
+    
+    let erro = false;
 
     for (let interesse of Object.keys(interesses)) {
-        console.log(interesse) // 24-11-2024
-        console.log(interesses[interesse]) // ['almoco']
-        
-        
+
+        for (let tipo of Object.keys(interesses[interesse])) {
+            console.log(interesses[interesse][tipo]);
+
+            let resposta = await fetch('/api/interesse', {
+                method: interesses[interesse][tipo] ? 'POST' : 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'dia': interesse,
+                    'tipo': tipo
+                })
+            });
+
+            if (resposta.status == 404) {
+                continue;
+            }
+
+            let respostaJSON = await resposta.json();
+
+            if (!respostaJSON.ok) {
+                erro = true;
+            } 
+        }    
     }
+
+    Swal.fire({
+        icon: erro ? "error" : "success",
+        title: erro ? "Erro" : "Refeições salvas",
+        text: erro ? "Ocorreu um erro durante o envio das refeições." : "Suas refeições foram enviadas e salvas com sucesso."
+    });
 });
