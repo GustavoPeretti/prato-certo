@@ -1,23 +1,39 @@
 # Prato Certo IFC
 
-O **Prato Certo IFC** é uma aplicação web desenvolvida para facilitar o planejamento e a organização das refeições dos usuários no refeitório. Com este app, você pode definir suas preferências alimentares e selecionar os dias da semana em que pretende utilizar o refeitório.
+O **Prato Certo IFC** é uma aplicação web inovadora, projetada para otimizar o planejamento e a organização das refeições dos usuários no refeitório. Com uma interface amigável, o aplicativo permite que os usuários definam suas preferências alimentares e escolham os dias da semana em que desejam utilizar o refeitório, proporcionando uma experiência personalizada e prática.
 
 ## Funcionalidades
 
-- **Seleção de Dias da Semana**: Escolha em quais dias pretende realizar suas refeições no refeitório.
-- **Interface Simples e Responsiva**: Navegue facilmente em qualquer dispositivo, com design adaptado para desktop, tablets e smartphones.
-- **Resumo Personalizado**: Visualize e edite suas escolhas de forma prática.
+- **Visualização do Cardápio**: Usuários normais podem acessar e visualizar o cardápio disponível, facilitando a escolha das refeições.
+  
+- **Cadastro de Cardápio**: Usuários administradores têm a capacidade de cadastrar e atualizar o cardápio, garantindo que as opções estejam sempre atualizadas.
+
+- **Controle de Intenção de Refeição**: A aplicação permite que os usuários indiquem suas intenções de refeição, ajudando na organização e planejamento das refeições.
+
+- **Relatório de Intenções**: Administradores podem visualizar o número de intenções de refeições, permitindo um melhor gerenciamento do refeitório.
+
+- **Autenticação de Usuários**: A aplicação conta com um sistema de autenticação que separa usuários normais de administradores, garantindo segurança e acesso adequado às funcionalidades.
+
+- **Interface Simples e Responsiva**: O design é otimizado para funcionar em diversos dispositivos, incluindo desktops, tablets e smartphones, proporcionando uma experiência fluida.
 
 ## Tecnologias Utilizadas
 
-- **HTML**
-- **CSS**
-- **JavaScript**
-- **MySQL**
-- **Flask**
+- **HTML**: Estruturação do conteúdo da aplicação.
+  
+- **CSS**: Estilização e design responsivo.
+  
+- **JavaScript**: Interatividade e dinamicidade na aplicação.
+  
+- **MySQL**: Gerenciamento de banco de dados para armazenar informações de usuários e cardápios.
+  
+- **Flask**: Framework utilizado para o desenvolvimento do backend da aplicação.
+  
+- **Figma**: Ferramenta de design utilizada para prototipagem e layout da interface.
 
 ## Instalação e Uso
 
-1. Clone para o repositório:
+Para instalar e utilizar o **Prato Certo IFC**, siga os passos abaixo:
+
+1. Clone o repositório:
    ```bash
    git clone https://github.com/seu-usuario/prato-certo-ifc.git
