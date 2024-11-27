@@ -21,4 +21,3 @@ def cardapio():
         return redirect(url_for('login.login_handler'))
     
     return render_template('cardapio.html')
-

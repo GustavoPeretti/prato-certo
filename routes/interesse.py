@@ -51,61 +51,47 @@ def cadastrar_interesse():
         'dia': lambda x: isinstance(x, str),
         'tipo': lambda x: isinstance(x, str) and x in ['cafe', 'almoco', 'lanche', 'janta']
     }
-
-    for parametro in parametros:
-        if parametro not in dados:
-            return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
-        argumento = dados[parametro]
-        if not parametros[parametro](argumento):
-            return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
     
+    if 'interesses' not in dados:
+        return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
+    
+    if not isinstance(dados['interesses'], list):
+        return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
+
+    interesses = dados['interesses']
+
+    for item_interesse in interesses:
+        for parametro in parametros:
+            if parametro not in item_interesse:
+                return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
+            argumento = item_interesse[parametro]
+            if not parametros[parametro](argumento):
+                return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
+
+    for item_interesse in interesses:
+        try:
+            db.query('INSERT INTO interesses VALUES (%s, %s, %s);', item_interesse['dia'], item_interesse['tipo'], session['usuario']['matricula'])
+        except:
+            pass
+
     try:
-        interesse = db.query('SELECT * FROM interesses WHERE dia = %s AND tipo = %s AND usuario = %s;', dados['dia'], dados['tipo'], session['usuario']['matricula'])
+        db.query('DELETE FROM interesses WHERE usuario = %s;', session['usuario']['matricula'])
     except:
-        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar validar o item.'}), 400
-    
-    if interesse:
-        return jsonify({'ok': False, 'mensagem': 'Interesse já declarado.'}), 400
-    
+        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar cadastrar os interesses.'}), 400
+
     try:
-        db.query('INSERT INTO interesses VALUES (%s, %s, %s);', dados['dia'], dados['tipo'], session['usuario']['matricula'])
+        argumentos = []
+
+        for item_interesse in interesses:
+            argumentos.append(item_interesse['dia'])
+            argumentos.append(item_interesse['tipo'])
+            argumentos.append(session['usuario']['matricula'])
+
+        db.query(
+            'INSERT INTO interesses VALUES ' + ', '.join(['(%s, %s, %s)'] * len(interesses)) + ';',
+            *argumentos
+        )
     except:
-        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar cadastrar o interesse.'}), 400
-    
-    return jsonify({'ok': True, 'mensagem': 'Interesse cadastrado.'}), 200
+        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar cadastrar os interesses.'}), 400
 
-@interesse.route('/', methods=['DELETE'])
-def deletar_interesse():
-    if 'usuario' not in session:
-        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
-    
-    dados = request.json
-
-    parametros = {
-        'dia': lambda x: isinstance(x, str),
-        'tipo': lambda x: isinstance(x, str) and x in ['cafe', 'almoco', 'lanche', 'janta']
-    }
-
-    for parametro in parametros:
-        if parametro not in dados:
-            return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
-        argumento = dados[parametro]
-        if not parametros[parametro](argumento):
-            return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
-    
-    try:
-        item = db.query('SELECT * FROM interesses WHERE dia = %s AND tipo = %s AND usuario = %s;', dados['dia'], dados['tipo'], session['usuario']['matricula'])
-    except:
-        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar validar o interesse.'}), 400
-    
-    if not item:
-        return jsonify({'ok': False, 'mensagem': 'Interesse não existente.'}), 404
-    
-    try:
-        db.query('DELETE FROM interesses WHERE dia = %s AND tipo = %s AND usuario = %s;', dados['dia'], dados['tipo'], session['usuario']['matricula'])
-    except:
-        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar deletar o interesse.'}), 400
-
-    return jsonify({'ok': True, 'mensagem': 'Interesse deletado.'}), 200
-
-
+    return jsonify({'ok': True, 'mensagem': 'Interesses cadastrados.'}), 200

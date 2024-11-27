@@ -45,7 +45,7 @@
     margin-bottom: 50px;
 }
 
-.tipos-select {
+.tipos-select, .tipos-select-modal {
     background-color: #a2a2a290;
     padding: 10px 10px;
     font-size: 18px;

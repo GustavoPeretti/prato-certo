@@ -1,3 +1,13 @@
+function obterData() {
+    let data = new Date();
+
+    let ano = data.getFullYear();
+    let mes = String(data.getMonth() + 1).padStart(2, '0');
+    let dia = String(data.getDate()).padStart(2, '0');
+
+    return `${ano}-${mes}-${dia}`;
+}
+
 const days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
 const nome = ['Café', 'Almoço', 'Lanche', 'Janta'];
 
@@ -86,56 +96,99 @@ function diasDaSemana() {
 }
 
 document.querySelector('#submit').addEventListener('click', async () => {
-    let interesses = {};
+    let interesses = [];
 
     for (let dia of days) {
-        let interessesDia = {};
-
         let bloco = document.querySelector(`.bloco-${dia.toLowerCase()}`);
 
         let checkboxes = bloco.querySelectorAll('input[type=checkbox]');
 
         for (let checkbox of checkboxes) {
-            interessesDia[Array.from(checkbox.classList).filter(e => e.substring(0, 6) == 'botao-')[0].substring(6)] = checkbox.checked;
-        }
-
-        interesses[diasDaSemana()[dia.toLowerCase()]] = interessesDia;
-    }
-    
-    let erro = false;
-
-    for (let interesse of Object.keys(interesses)) {
-
-        for (let tipo of Object.keys(interesses[interesse])) {
-            console.log(interesses[interesse][tipo]);
-
-            let resposta = await fetch('/api/interesse', {
-                method: interesses[interesse][tipo] ? 'POST' : 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'dia': interesse,
-                    'tipo': tipo
-                })
-            });
-
-            if (resposta.status == 404) {
-                continue;
+            if (checkbox.checked) {
+                interesses.push({
+                    dia: diasDaSemana()[dia.toLowerCase()],
+                    tipo: Array.from(checkbox.classList).filter(e => e.substring(0, 6) == 'botao-')[0].substring(6)
+                });
             }
+        }
+    }
 
-            let respostaJSON = await resposta.json();
+    let resposta = await fetch('/api/interesse', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'interesses': interesses
+        })
+    });
 
-            if (!respostaJSON.ok) {
-                erro = true;
-            } 
-        }    
+    let respostaJSON = await resposta.json();
+
+    if (!respostaJSON.ok) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: respostaJSON.mensagem
+        });
+
+        return;
     }
 
     Swal.fire({
-        icon: erro ? "error" : "success",
-        title: erro ? "Erro" : "Refeições salvas",
-        text: erro ? "Ocorreu um erro durante o envio das refeições." : "Suas refeições foram enviadas e salvas com sucesso."
+        icon: "success",
+        title: "Refeições salvas",
+        text: "Suas refeições foram enviadas e salvas com sucesso."
     });
+});
+
+async function atualizarTabela() {
+    let tipo = document.querySelector('.tipos-select-modal').value
+
+    let resposta = await fetch(`/api/cardapio/${obterData()}/${tipo}`);
+
+    let respostaJSON = await resposta.json();
+
+    if (!respostaJSON.ok) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: respostaJSON.mensagem
+        });
+        return;
+    }
+
+    let cardapio = respostaJSON.resultado;
+
+    let tbody = document.querySelector('tbody');
+
+    tbody.innerHTML = '';
+
+    let dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+
+    dias = dias.reverse();
+
+    for (let dia of Object.keys(cardapio).sort()) {
+        let tr = document.createElement('tr');
+
+        let th = document.createElement('th');
+        th.textContent = dias.pop();
+
+        let td = document.createElement('td');
+        td.textContent = cardapio[dia].toString().replaceAll(',', ', ');
+
+        tr.appendChild(th);
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+    }
+}
+
+document.querySelector('#ver-cardapio-btn').addEventListener('click', () => {
+    atualizarTabela();
+});
+
+document.querySelector('.tipos-select-modal').addEventListener('change', () => {
+    atualizarTabela();
 });

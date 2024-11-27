@@ -32,6 +32,7 @@ document.querySelector('#botao-login').addEventListener('click', async () => {
             title: "Erro",
             text: respostaJSON.mensagem
         });
+        
         return;
     }
 
