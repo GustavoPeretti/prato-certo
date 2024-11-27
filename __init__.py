@@ -1,6 +1,7 @@
 from flask import Flask
 from .routes.home import home
 from .routes.login import login
+from .routes.refeicoes import refeicoes
 from .routes.api import api 
 import os
 

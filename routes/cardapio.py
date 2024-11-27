@@ -89,3 +89,4 @@ def deletar_cardapio():
         'item': lambda x: isinstance(x, str)
     }
 
+    
