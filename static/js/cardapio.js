@@ -63,6 +63,7 @@ document.querySelector('.tipos-select').addEventListener('change', async () => {
             title: "Erro",
             text: respostaJSON.mensagem
         });
+        
         return;
     }
 

@@ -27,6 +27,6 @@ def login_handler():
             'administrador': resultado[0]['administrador']
         }
         
-        return jsonify({'ok': True, 'mensagem': 'Usuário autenticado.'}), 200
+        return jsonify({'ok': True, 'mensagem': 'Usuário autenticado.', 'administrador': resultado[0]['administrador']}), 200
 
     return render_template('login.html')
