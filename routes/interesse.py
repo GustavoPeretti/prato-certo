@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, session, request
+import datetime
 from ..database.db import db
 
 interesse = Blueprint('interesse', __name__)
@@ -68,14 +69,30 @@ def cadastrar_interesse():
             if not parametros[parametro](argumento):
                 return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
 
-    for item_interesse in interesses:
-        try:
-            db.query('INSERT INTO interesses VALUES (%s, %s, %s);', item_interesse['dia'], item_interesse['tipo'], session['usuario']['matricula'])
-        except:
-            pass
+    try:
+        data = datetime.datetime.now().date()
+
+        inicio_semana = data - datetime.timedelta(days=(data.weekday() + 1) % 7)
+
+        dias = [inicio_semana + datetime.timedelta(days=i) for i in range(7)]
+
+        dias = [dia.strftime('%Y-%m-%d') for dia in dias]
+    except:
+        return jsonify({'ok': False, 'mensagem': 'Erro ao processar a data.'}), 400
 
     try:
-        db.query('DELETE FROM interesses WHERE usuario = %s;', session['usuario']['matricula'])
+        db.query('DELETE FROM interesses'
+            'WHERE usuario = %s ' +
+            'AND (dia = %s ' +
+            'OR dia = %s ' +
+            'OR dia = %s ' +
+            'OR dia = %s ' +
+            'OR dia = %s ' +
+            'OR dia = %s ' +
+            'OR dia = %s);',
+            session['usuario']['matricula'],
+            *dias
+        )
     except:
         return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar cadastrar os interesses.'}), 400
 

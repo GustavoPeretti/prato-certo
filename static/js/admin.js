@@ -1,3 +1,6 @@
+const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+const tipos = ['cafe', 'almoco', 'lanche', 'janta']
+
 function obterData() {
     let data = new Date();
 
@@ -9,10 +12,10 @@ function obterData() {
 }
 
 let traducaoTipo = {
-    'cafe': 'cafés',
-    'almoco': 'almoços',
-    'lanche': 'lanches',
-    'janta': 'jantas'
+    'cafe': 'café(s)',
+    'almoco': 'almoço(s)',
+    'lanche': 'lanche(s)',
+    'janta': 'janta(s)'
 }
 
 async function atualizarRefeicoes() {
@@ -159,3 +162,89 @@ document.querySelectorAll('.accordion-body button').forEach(e => {
     });
 });
 
+document.querySelector('#save-cardapio-btn').addEventListener('click', async () => {
+    let itens = [];
+
+    let data = document.querySelector('#formulario-cardapio > input[type=date]').value;
+
+    if (!data) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: "Preencha os campos vazios."
+        });
+
+        return;
+    }
+
+    for (let tipo of tipos) {
+        let bloco = document.querySelector(`.acordeao-${tipo}`);
+
+        let itens_elementos = bloco.querySelectorAll('.item-refeicao-acordeao span:first-child')
+
+        for (let item of itens_elementos) {
+            itens.push({
+                dia: data,
+                tipo: tipo,
+                item: item.textContent
+            });
+        }
+    }
+
+    let resposta = await fetch('/api/cardapio', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'itens': itens
+        })
+    });
+
+    let respostaJSON = await resposta.json();
+
+    if (!respostaJSON.ok) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: respostaJSON.mensagem
+        });
+
+        return;
+    }
+
+    Swal.fire({
+        icon: "success",
+        title: "Cardápio Salvo",
+        text: "O cardápio foi atualizado com suas alterações."
+    });
+});
+
+async function atualizarCardapio() {
+    let data = document.querySelector('#formulario-cardapio > input[type=date]').value
+
+    let resposta = await fetch(`/api/cardapio/${data}`);
+
+    let respostaJSON = await resposta.json();
+
+    if (!respostaJSON.ok) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: respostaJSON.mensagem
+        });
+        
+        return;
+    }
+
+    let itens = respostaJSON.resultado;
+
+    for (let tipo of tipos) {
+        for (let item of itens[tipo]) {
+            adicionarItem(tipo, item);
+        }
+    }
+}
+
+document.querySelector('#formulario-cardapio > input[type=date]').addEventListener('change', atualizarCardapio);

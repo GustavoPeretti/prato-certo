@@ -4,8 +4,26 @@ from ..database.db import db
 
 cardapio = Blueprint('cardapio', __name__)
 
+@cardapio.route('/<data>')
+def buscar_cardapios_por_data(data):
+    resultado = db.query('SELECT * FROM itens_cardapios_dias WHERE dia = %s;', data)
+
+    if not resultado:
+        return jsonify({'ok': False, 'mensagem': 'Nenhum recurso foi encontrado.'}), 404
+    
+    itens = {}
+
+    for tipo in ['cafe', 'almoco', 'lanche', 'janta']:
+        if tipo not in itens:
+            itens[tipo] = []
+        for item in resultado:
+            if item['tipo'] == tipo:
+                itens[tipo].append(item['item'])
+
+    return jsonify({'ok': True, 'resultado': itens}), 200
+
 @cardapio.route('/<data>/<tipo>')
-def buscar_cardapios(data, tipo):
+def buscar_cardapios_por_tipo(data, tipo):
     try:
         data = datetime.datetime.strptime(data, '%Y-%m-%d').date()
 
@@ -21,8 +39,8 @@ def buscar_cardapios(data, tipo):
         return jsonify({'ok': False, 'mensagem': 'Tipo inválido.'}), 400
     
     resultado = db.query(
-        'SELECT * FROM itens_cardapios_dias' +
-        ' WHERE tipo = %s ' +
+        'SELECT * FROM itens_cardapios_dias ' +
+        'WHERE tipo = %s ' +
         'AND (dia = %s ' +
         'OR dia = %s ' +
         'OR dia = %s ' +
@@ -61,64 +79,42 @@ def cadastrar_cardapio():
     parametros = {
         'dia': lambda x: isinstance(x, str),
         'tipo': lambda x: isinstance(x, str) and x in ['cafe', 'almoco', 'lanche', 'janta'],
-        'itens': lambda x: isinstance(x, list) and x
     }
 
-    for parametro in parametros:
-        if parametro not in dados:
-            return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
-        argumento = dados[parametro]
-        if not parametros[parametro](argumento):
-            return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
+    if 'itens' not in dados:
+        return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
     
-    lista_itens = dados['itens']
+    if not isinstance(dados['itens'], list):
+        return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
 
-    for item in lista_itens:
-        try:
-            db.query('INSERT INTO itens_cardapios_dias VALUES (%s, %s, %s);',
-                dados['dia'],
-                dados['tipo'],
-                item
-            )
-        except:
-            return jsonify({'ok': False, 'mensagem': 'Erro ao tentar cadastrar os itens.'}), 400
+    itens = dados['itens']
+
+    for item_interesse in itens:
+        for parametro in parametros:
+            if parametro not in item_interesse:
+                return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
+            argumento = item_interesse[parametro]
+            if not parametros[parametro](argumento):
+                return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
+            
+    try:
+        db.query('DELETE FROM itens_cardapios_dias WHERE dia = %s;', itens[0]['dia'])
+    except:
+        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar cadastrar os itens.'}), 400
     
+    try:
+        argumentos = []
+
+        for item in itens:
+            argumentos.append(item['dia'])
+            argumentos.append(item['tipo'])
+            argumentos.append(item['item'])
+
+        db.query(
+            'INSERT INTO itens_cardapios_dias VALUES ' + ', '.join(['(%s, %s, %s)'] * len(itens)) + ';',
+            *argumentos
+        )
+    except:
+        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar cadastrar os itens.'}), 400
+
     return jsonify({'ok': True, 'mensagem': 'Itens cadastrados.'}), 200
-
-@cardapio.route('/', methods=['DELETE'])
-def deletar_cardapio():
-    if 'usuario' not in session:
-        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
-    
-    if not session['usuario']['administrador']:
-        return jsonify({'ok': False, 'mensagem': 'Não autorizado.'}), 401
-    
-    dados = request.json
-
-    parametros = {
-        'dia': lambda x: isinstance(x, str),
-        'tipo': lambda x: isinstance(x, str) and x in ['cafe', 'almoco', 'lanche', 'janta'],
-        'item': lambda x: isinstance(x, str)
-    }
-
-    for parametro in parametros:
-        if parametro not in dados:
-            return jsonify({'ok': False, 'mensagem': 'Parâmetro obrigatório não informado.'}), 400
-        argumento = dados[parametro]
-        if not parametros[parametro](argumento):
-            return jsonify({'ok': False, 'mensagem': 'Argumento em formato inválido.'}), 400
-    
-    try:
-        item = db.query('SELECT * FROM itens_cardapios_dias WHERE dia = %s AND tipo = %s AND item = %s;', dados['dia'], dados['tipo'], dados['item'])
-    except:
-        return jsonify({'ok': False, 'mensagem': 'Erro ao tentar validar o item.'}), 400
-    
-    if not item:
-        return jsonify({'ok': False, 'mensagem': 'Item não existente.'}), 404
-    
-    try:
-        db.query('DELETE FROM itens_cardapios_dias WHERE dia = %s AND tipo = %s AND item = %s;', dados['dia'], dados['tipo'], dados['item'])
-    except:
-        return jsonify({'ok': False, 'mensagem': 'Houve um erro ao tentar deletar o item.'}), 400
-
-    return jsonify({'ok': True, 'mensagem': 'Item deletado.'}), 200
